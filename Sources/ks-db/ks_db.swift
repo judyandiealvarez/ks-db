@@ -5,94 +5,88 @@ import Dependencies
 
 extension Appl.Dependencies {
     public struct DB : Sendable {
+        fileprivate func addAuditFields(_ t: TableDefinition) {
+            t.column("createdOn", .datetime).notNull()
+            t.column("updatedOn", .datetime).notNull()
+            t.column("createdBy", .text).notNull()
+            t.column("updatedBy", .text).notNull()
+        }
+        
+        fileprivate func addUploadFields(_ t: TableDefinition) {
+            t.column("toBeDeleted", .boolean).notNull()
+            t.column("uploaded", .boolean).notNull()
+        }
+        
+        fileprivate func addIdFields(_ t: TableDefinition) {
+            t.autoIncrementedPrimaryKey("recId")
+            t.column("id", .text)
+        }
+        
+        fileprivate func addDefaultFields(_ t: TableDefinition) {
+            addIdFields(t)
+            addAuditFields(t)
+            addUploadFields(t)
+        }
+        
         func start() throws {
-            let dbQueue = try DatabaseQueue()
+            let dbQueue = try DatabaseQueue() // path: "/Users/shadowchamber/Projects/ks-db/ksdb.sqlite")
 
             try dbQueue.write { db in
                 try db.create(table: "barcode", ifNotExists: true) { t in
-                    t.autoIncrementedPrimaryKey("recId")
-                    t.column("id", .text)
-                    t.column("createdOn", .datetime).notNull()
-                    t.column("updatedOn", .datetime).notNull()
-                    t.column("createdBy", .text).notNull()
-                    t.column("updatedBy", .text).notNull()
-                    t.column("toBeDeleted", .boolean).notNull()
-                    t.column("uploaded", .boolean).notNull()
+                    addDefaultFields(t)
                     
-                    t.column("code", .integer).notNull()
+                    t.column("code", .text).notNull()
                 }
                 
                 try db.create(table: "item", ifNotExists: true) { t in
-                    t.autoIncrementedPrimaryKey("recId")
-                    t.column("id", .text)
+                    addDefaultFields(t)
+                    
                     t.column("name", .text).notNull()
                     t.column("code", .integer).notNull()
-                    t.column("container", .blob).notNull()
                     t.column("descriptionText", .text).notNull()
-                    t.column("timeStamp", .datetime).notNull()
-                    t.column("toBeDeleted", .boolean).notNull()
-                    t.column("uploaded", .boolean).notNull()
                 }
                 
                 try db.create(table: "image", ifNotExists: true) { t in
-                    t.autoIncrementedPrimaryKey("recId")
-                    t.column("id", .text)
-                    t.column("toBeDeleted", .boolean).notNull()
-                    t.column("uploaded", .boolean).notNull()
+                    addDefaultFields(t)
                 }
                 
                 try db.create(table: "category", ifNotExists: true) { t in
-                    t.autoIncrementedPrimaryKey("recId")
-                    t.column("id", .text)
+                    addDefaultFields(t)
+                    
                     t.column("name", .text).notNull()
+                    
                     t.column("imageId", .text).notNull()
-                        .references("imageId", onDelete: .cascade)
+                        .references("image", onDelete: .restrict)
                     t.column("parentId", .text)
                         .references("category", onDelete: .cascade)
-                    t.column("toBeDeleted", .boolean).notNull()
-                    t.column("uploaded", .boolean).notNull()
                 }
                 
                 try db.create(table: "itemBarcode", ifNotExists: true) { t in
-                    t.autoIncrementedPrimaryKey("recId")
-                    t.column("id", .text)
+                    addDefaultFields(t)
+                    
                     t.column("itemId", .text).notNull()
                         .references("item", onDelete: .cascade)
                     t.column("barcodeId", .text).notNull()
                         .references("barcode", onDelete: .cascade)
-                    t.column("toBeDeleted", .boolean).notNull()
-                    t.column("uploaded", .boolean).notNull()
                 }
                 
                 try db.create(table: "itemCategory", ifNotExists: true) { t in
-                    t.autoIncrementedPrimaryKey("recId")
-                    t.column("id", .text)
+                    addDefaultFields(t)
+                    
                     t.column("itemId", .text).notNull()
                         .references("item", onDelete: .cascade)
                     t.column("categoryId", .text).notNull()
                         .references("category", onDelete: .cascade)
-                    t.column("toBeDeleted", .boolean).notNull()
-                    t.column("uploaded", .boolean).notNull()
                 }
                 
                 try db.create(table: "itemImage", ifNotExists: true) { t in
-                    t.autoIncrementedPrimaryKey("recId")
-                    t.column("id", .text)
+                    addDefaultFields(t)
+                    
                     t.column("itemId", .text).notNull()
                         .references("item", onDelete: .cascade)
                     t.column("imageId", .text).notNull()
                         .references("image", onDelete: .cascade)
-                    t.column("toBeDeleted", .boolean).notNull()
-                    t.column("uploaded", .boolean).notNull()
                 }
-                
-                /*try db.create(table: "books", ifNotExists: true) { t in
-                    t.autoIncrementedPrimaryKey("id")
-                    t.column("title", .text).notNull()
-                    t.column("authorID", .integer)
-                        .notNull()
-                        .references("authors", onDelete: .cascade) // Create a foreign key reference
-                }*/
             }
         }
     }
