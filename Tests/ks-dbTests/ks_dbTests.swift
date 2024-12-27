@@ -1,14 +1,19 @@
 import Testing
 @testable import ks_db
 import Appl
+import Dependencies
 
-@Test func example() async throws {
+@Test func example() async throws
+{
     // Write your test here and use APIs like `#expect(...)` to check expected conditions.
 
-    do {
-        let db = Appl.Dependencies.DB()
+    do
+    {
+        let db = DependencyValues.test.data
         try db.start()
-    } catch let error {
+    }
+    catch let error
+    {
         print(error.localizedDescription)
     }
     
@@ -33,4 +38,6 @@ import Appl
         arguments: ["score": 1000, "id": 1])
     }*/
 }
+
+
 

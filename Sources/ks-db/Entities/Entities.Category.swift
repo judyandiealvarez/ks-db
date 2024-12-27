@@ -9,19 +9,19 @@ import Appl
 import Foundation
 import GRDB
 
-extension Appl.Dependencies.DB.Entities {
-    
-    struct Category: TableRecord, Codable {
-        static let items = hasMany(Item.self) 
-        
-        var recId: Int
+extension Appl.Dependencies.KSDB.Entities {
+    public struct Category: TableRecord, Codable {
+        var recId: Int64
         var id: UUID
-        var code: Int32
-        var container: UUID
-        var descriptionText: String
-        var timeStamp: Date
+        var createdOn: Date
+        var updatedOn: Date
+        var createdBy: String
+        var updatedBy: String
         var toBeDeleted: Bool
         var uploaded: Bool
+
+        static let items = hasMany(Item.self)
+
+        var descriptionText: String
     }
 }
-

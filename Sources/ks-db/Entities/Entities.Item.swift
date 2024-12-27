@@ -9,13 +9,12 @@ import Appl
 import Foundation
 import GRDB
 
-extension Appl.Dependencies.DB.Entities {
-    
-    struct Item: TableRecord, Codable {
+extension Appl.Dependencies.KSDB.Entities {
+    public struct Item: TableRecord, Codable {
         static let itemBarcodes = hasMany(ItemBarcode.self)
         static let itemCategories = hasMany(ItemCategory.self)
         static let itemImages = hasMany(ItemImage.self)
-        
+
         var id: UUID
         var name: String
         var code: Int32

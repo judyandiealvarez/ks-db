@@ -1,5 +1,5 @@
 {
-  "originHash" : "3392a9dfdfeecc3a121b5d949a1eb1c40619a301b1c325c47e96d85dc6295d41",
+  "originHash" : "490f77d1aa7d8d63114d7ccf730fc5f0db93d0a5076fa394f419d8919b6a51a4",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -134,6 +134,15 @@
       "state" : {
         "revision" : "b7e6c23921cc552fca13857d666f85de1f0dce1d",
         "version" : "1.0.2"
+      }
+    },
+    {
+      "identity" : "swiftlintplugins",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SimplyDanny/SwiftLintPlugins",
+      "state" : {
+        "revision" : "f9731bef175c3eea3a0ca960f1be78fcc2bc7853",
+        "version" : "0.57.1"
       }
     },
     {

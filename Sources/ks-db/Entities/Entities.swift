@@ -8,7 +8,7 @@
 import Appl
 import Foundation
 
-extension Appl.Dependencies.DB {
+extension Appl.Dependencies.KSDB {
     public struct Entities {
     }
 }

@@ -9,12 +9,11 @@ import Appl
 import Foundation
 import GRDB
 
-extension Appl.Dependencies.DB.Entities {
-    
-    struct ItemImage: TableRecord, Codable {
+extension Appl.Dependencies.KSDB.Entities {
+    public struct ItemImage: TableRecord, Codable {
         static let item = belongsTo(Item.self)
         static let image = belongsTo(Image.self)
-        
+
         var id: UUID
         var itemId: UUID
         var barcodeId: UUID
