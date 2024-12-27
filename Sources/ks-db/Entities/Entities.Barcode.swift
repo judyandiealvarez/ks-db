@@ -22,7 +22,7 @@ extension Appl.Dependencies.KSDB.Entities {
 
         var code: String
 
-        static let itemBarcodes = hasOne(ItemBarcode.self)
+        static let itemBarcode = hasOne(ItemBarcode.self)
 
         /*public mutating func didInsert(_ inserted: InsertionSuccess) {
             recId = inserted.rowID

@@ -11,15 +11,15 @@ import GRDB
 
 extension Appl.Dependencies.KSDB.Entities {
     public struct Image: TableRecord, Codable {
-        static let itemImages = hasMany(ItemImage.self)
+        var recId: Int64 = 0
+        var id: UUID = UUID()
+        var createdOn: Date = Date()
+        var updatedOn: Date = Date()
+        var createdBy: String = "me"
+        var updatedBy: String = "me"
+        var toBeDeleted: Bool = false
+        var uploaded: Bool = false
 
-        var recId: Int
-        var id: UUID
-        var code: Int32
-        var container: UUID
-        var descriptionText: String
-        var timeStamp: Date
-        var toBeDeleted: Bool
-        var uploaded: Bool
+        static let itemImages = hasMany(ItemImage.self)
     }
 }

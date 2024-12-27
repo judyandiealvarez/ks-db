@@ -11,13 +11,19 @@ import GRDB
 
 extension Appl.Dependencies.KSDB.Entities {
     public struct ItemCategory: TableRecord, Codable {
+        var recId: Int64 = 0
+        var id: UUID = UUID()
+        var createdOn: Date = Date()
+        var updatedOn: Date = Date()
+        var createdBy: String = "me"
+        var updatedBy: String = "me"
+        var toBeDeleted: Bool = false
+        var uploaded: Bool = false
+
+        var itemRefRecId: Int64
+        var categoryRefRecId: Int64
+
         static let item = belongsTo(Item.self)
         static let category = belongsTo(Category.self)
-
-        var id: UUID
-        var itemId: UUID
-        var barcodeId: UUID
-        var toBeDeleted: Bool
-        var uploaded: Bool
     }
 }

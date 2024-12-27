@@ -95,9 +95,9 @@ extension Appl.Dependencies {
 
                     tableDefinition.column("name", .text).notNull().unique()
 
-                    tableDefinition.column("imageId", .text).notNull()
+                    tableDefinition.column("imageRefRecId", .text).notNull()
                         .references("image", onDelete: .restrict)
-                    tableDefinition.column("parentId", .text)
+                    tableDefinition.column("parentRefRecId", .text)
                         .references("category", onDelete: .cascade)
                 }
 
@@ -106,27 +106,27 @@ extension Appl.Dependencies {
                 try kdb.create(table: "itemBarcode", ifNotExists: true) { tableDefinition in
                     addDefaultFields(tableDefinition)
 
-                    tableDefinition.column("itemId", .text).notNull()
+                    tableDefinition.column("itemRefRecId", .text).notNull()
                         .references("item", onDelete: .cascade)
-                    tableDefinition.column("barcodeId", .text).notNull()
+                    tableDefinition.column("barcodeRefRecId", .text).notNull()
                         .references("barcode", onDelete: .cascade)
                 }
 
                 try kdb.create(table: "itemCategory", ifNotExists: true) { tableDefinition in
                     addDefaultFields(tableDefinition)
 
-                    tableDefinition.column("itemId", .text).notNull()
+                    tableDefinition.column("itemRefRecId", .text).notNull()
                         .references("item", onDelete: .cascade)
-                    tableDefinition.column("categoryId", .text).notNull()
+                    tableDefinition.column("categoryRefRecId", .text).notNull()
                         .references("category", onDelete: .cascade)
                 }
 
                 try kdb.create(table: "itemImage", ifNotExists: true) { tableDefinition in
                     addDefaultFields(tableDefinition)
 
-                    tableDefinition.column("itemId", .text).notNull()
+                    tableDefinition.column("itemRefRecId", .text).notNull()
                         .references("item", onDelete: .cascade)
-                    tableDefinition.column("imageId", .text).notNull()
+                    tableDefinition.column("imageRefRecId", .text).notNull()
                         .references("image", onDelete: .cascade)
                 }
             }
