@@ -10,7 +10,7 @@ import Foundation
 import GRDB
 
 extension Appl.Dependencies.KSDB.Entities {
-    public struct ItemBarcode: TableRecord, Codable {
+    public struct ItemBarcode: TableRecord, Codable, FetchableRecord, PersistableRecord {
         var recId: Int64 = 0
         var id: UUID = UUID()
         var createdOn: Date = Date()

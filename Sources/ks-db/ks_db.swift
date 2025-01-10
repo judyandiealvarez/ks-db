@@ -4,6 +4,13 @@ import GRDB
 import Dependencies
 
 extension Appl.Dependencies {
+    public typealias KSDBImage = Appl.Dependencies.KSDB.Entities.Image
+    public typealias KSDBItemImage = Appl.Dependencies.KSDB.Entities.ItemImage
+    public typealias KSDBCategory = Appl.Dependencies.KSDB.Entities.Category
+    public typealias KSDBItem = Appl.Dependencies.KSDB.Entities.Item
+    public typealias KSDBItemCategory = Appl.Dependencies.KSDB.Entities.ItemCategory
+    public typealias KSDBBarcode = Appl.Dependencies.KSDB.Entities.Barcode
+
     public struct KSDB: Sendable {
         public let path: String
         public init(_ path: String = URL.documentsDirectory.appending(path: "ksdb.sqlite").path()) {
@@ -50,10 +57,7 @@ extension Appl.Dependencies {
             try migrator.migrate(databaseQueue)
 
             try databaseQueue.write { ksdb in
-                var insertedBarcode = try Appl.Dependencies.KSDB.Entities.Barcode(
-                    code: "53674567"
-                )
-                .inserted(ksdb)
+                var insertedBarcode = try Appl.Dependencies.KSDB.Entities.Barcode("53674567").inserted(ksdb)
 
                 insertedBarcode.code += "0"
 
@@ -64,7 +68,7 @@ extension Appl.Dependencies {
         /// The DatabaseMigrator that defines the database schema.
         ///
         /// See <https://swiftpackageindex.com/groue/grdb.swift/documentation/grdb/migrations>
-        private var migrator: DatabaseMigrator {
+        var migrator: DatabaseMigrator {
             var migrator = DatabaseMigrator()
 
     #if DEBUG
@@ -137,6 +141,150 @@ extension Appl.Dependencies {
             // }
 
             return migrator
+        }
+
+        func fetchItemsAll() throws -> [KSDBItem] {
+            let databaseQueue = try DatabaseQueue(
+              path: path,
+              configuration: Self.makeConfiguration()
+            )
+
+            return try databaseQueue.read { ksdb in
+                try KSDBItem.fetchAll(ksdb) // , sql: "SELECT * FROM item")
+            }
+        }
+
+        func categoryExists(id: UUID) throws -> Bool {
+            let databaseQueue = try DatabaseQueue(
+              path: path,
+              configuration: Self.makeConfiguration()
+            )
+
+            return try databaseQueue.read { ksdb in
+                let request = KSDBCategory.filter(Column("id") == id.uuidString)
+                let record = try KSDBCategory.fetchOne(ksdb, request)
+                return record != nil
+            }
+        }
+
+        func imageExists(id: UUID) throws -> Bool {
+            let databaseQueue = try DatabaseQueue(
+              path: path,
+              configuration: Self.makeConfiguration()
+            )
+
+            return try databaseQueue.read { ksdb in
+                let request = KSDBItem.filter(Column("id") == id.uuidString)
+                // let request: SQLRequest<Player> = """
+                //        SELECT * FROM image WHERE id = '\(id.uuidString)' LIMIT 1
+                // """
+                let record = try KSDBItem.fetchOne(ksdb, request)
+                // try KSDBItem.fetchOne(ksdb, sql: "SELECT * FROM image WHERE id = '?' LIMIT 1",
+                // arguments: [id.uuidString])
+
+                return record != nil
+            }
+        }
+
+        func imageExistsByGuidStr(guid: String) throws -> Bool {
+            let databaseQueue = try DatabaseQueue(
+              path: path,
+              configuration: Self.makeConfiguration()
+            )
+
+            return try databaseQueue.read { ksdb in
+                let request = KSDBCategory.filter(Column("id") == guid)
+                let record = try KSDBCategory.fetchOne(ksdb, request)
+                return record != nil
+            }
+        }
+
+        func addTestItem(parentCategory: KSDBCategory?) throws {
+
+        }
+
+        func addCategoryWithImage(
+            categoryName: String,
+            imageData: Data?,
+            parentCategoryId: UUID?
+        ) throws -> KSDBCategory {
+            return KSDBCategory(
+                categoryName,
+                imageRefRecId: 0,
+                parentRefRecId: 0
+            )
+        }
+
+        func fetchCategoriesById(id: UUID) -> [KSDBCategory] {
+            return [KSDBCategory]()
+        }
+
+        func fetchCategoriesFromCoreData() async throws -> [KSDBCategory] {
+            return [KSDBCategory]()
+        }
+
+        func fetchItemsFromCoreData() async throws -> [KSDBItem] {
+            return [KSDBItem]()
+        }
+
+        func addImage(imageData: Data) throws {
+
+        }
+
+        func addImageWithId(id: UUID, imageData: Data, uploaded: Bool) throws {
+
+        }
+
+        func addImageWithGuid(guid: String, imageData: Data) {
+
+        }
+
+        func fetchNullableCategoryById(id: UUID) throws -> KSDBCategory? {
+            return nil
+        }
+
+        func fetchNullableItemById(id: UUID) throws -> KSDBItem? {
+            return nil
+        }
+
+        func fetchNullableItemImageById(id: UUID) throws -> KSDBItemImage? {
+            return nil
+        }
+
+        func fetchNullableItemCategoryById(id: UUID) throws -> KSDBItemCategory? {
+            return nil
+        }
+
+        func fetchImageById(id: UUID) throws -> KSDBImage {
+            return KSDBImage()
+        }
+
+        func fetchCategoryById(id: UUID) throws -> KSDBCategory {
+            return KSDBCategory("", imageRefRecId: 0, parentRefRecId: 0)
+        }
+
+        func fetchItemById(id: UUID) throws -> KSDBItem {
+            return KSDBItem(name: "", code: "", descriptionText: "")
+        }
+
+        func fetchItemCategoryById(id: UUID) throws -> KSDBItemCategory {
+            return KSDBItemCategory(itemRefRecId: 0, categoryRefRecId: 0)
+        }
+
+        func fetchItemImageById(id: UUID) throws -> KSDBItemImage {
+            return KSDBItemImage(itemRefRecId: 0, imageRefRecId: 0)
+        }
+
+        func fetchItemImagesByItemId(id: UUID) throws -> [KSDBItemImage] {
+            return [KSDBItemImage]()
+        }
+
+        func fetchFirstItemImageByItemId(id: UUID) throws -> KSDBItemImage {
+            return KSDBItemImage(itemRefRecId: 0, imageRefRecId: 0)
+        }
+
+        func fetchFirstNullabelItemImageByItemId(id: UUID) throws -> KSDBItemImage? {
+            return nil
         }
     }
 }

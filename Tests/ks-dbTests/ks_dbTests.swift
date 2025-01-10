@@ -10,7 +10,7 @@ import Dependencies
     do
     {
         let db = DependencyValues.test.data
-        try db.start()
+        try db.initDemoData()
     }
     catch let error
     {

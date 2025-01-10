@@ -10,7 +10,7 @@ import Foundation
 import GRDB
 
 extension Appl.Dependencies.KSDB.Entities {
-    public struct Category: TableRecord, Codable {
+    public struct Category: TableRecord, Codable, FetchableRecord, PersistableRecord {
         var recId: Int64 = 0
         var id: UUID = UUID()
         var createdOn: Date = Date()
@@ -29,5 +29,11 @@ extension Appl.Dependencies.KSDB.Entities {
         static let parent = belongsTo(Category.self)
         static let items = hasMany(Item.self)
         static let subCategories = hasMany(Category.self)
+
+        public init(_ name: String, imageRefRecId: Int64, parentRefRecId: Int64?) {
+            self.name = name
+            self.imageRefRecId = imageRefRecId
+            self.parentRefRecId = parentRefRecId
+        }
     }
 }
