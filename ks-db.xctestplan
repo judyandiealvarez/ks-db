@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "8249B125-3F66-450D-9A00-26105EF5272D",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ks-dbTests",
+        "name" : "ks-dbTests"
+      }
+    }
+  ],
+  "version" : 1
+}
