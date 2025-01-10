@@ -19,8 +19,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/swipentap/swift-tca-appl.git", from: "1.0.2"),
-        .package(url: "https://github.com/groue/GRDB.swift.git", branch: "master"),
-        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.57.0")
+        .package(url: "https://github.com/groue/GRDB.swift.git", branch: "master") //,
+        //.package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.57.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -30,13 +30,13 @@ let package = Package(
             dependencies: [
                 .product(name: "Appl", package: "swift-tca-appl"),
                 .product(name: "GRDB", package: "grdb.swift"),
-            ],
+            ]/*,
             plugins: [
                 .plugin(
                     name: "SwiftLintBuildToolPlugin",
                     package: "SwiftLintPlugins"
                 )
-            ]
+            ]*/
         ),
         .testTarget(
             name: "ks-dbTests",
